@@ -42,6 +42,37 @@ server.get('/hubs',(req,res) => {
     })
 });
 
+//get/hubd:id
+
+server.get('/hubs/:id',(req,res) => {
+
+
+
+   const { id } = req.params;
+
+    db.findById(id)
+    .then(hubs  => {
+        if(id){
+            res.json(hubs);
+        }
+        else {
+            res.status(404).json({
+                message: "invalid hub id"
+            })
+        }
+    })
+       
+    .catch(err => {
+        res.status(500).json({
+            err: err
+        })
+    })
+
+});
+
+
+
+
 
 //get/hubs
 
@@ -60,6 +91,59 @@ server.post('/hubs',(req,res) => {
         })
     })
 });
+
+//REMOVE
+server.delete('/hubs/:id',(req,res) => {
+
+
+   const { id } = req.params;
+
+   db.remove(id)
+    .then(deleteHub => {
+     if(deleteHub){
+        res.json(deleteHub);
+     } else {
+         res.status(404).json({
+             message: "invalid hub id"
+         })
+     }
+    })
+    .catch(err => {
+        res.status(500).json({
+            err: err,
+            message: 'failed to create a destroy hub'
+        })
+    })
+});
+
+
+//PUT
+server.put('/hubs/:id',(req,res) => {
+
+
+    const { id } = req.params;
+    const changes = req.body;
+ 
+    db.update(id, changes)
+     .then(updated => {
+      if(updated){
+         res.json(updated);
+      } else {
+          res.status(404).json({
+              message: "invalid updated"
+          })
+      }
+     })
+     .catch(err => {
+         res.status(500).json({
+             err: err,
+             message: 'failed to updated hub'
+         })
+     })
+ });
+ 
+ 
+
 
 
 
